@@ -3,6 +3,7 @@
 ULTRA is a 2D fighting game in Unity. It's a lot like Street Fighter. I plan to release it for iOS, maybe also android if it isn't inconvenient.
 
 Controls (planned, subject to change throughout development):
+
     - Press the arrow buttons on screen to walk left and right.
 
     - //Double tap the arrow buttons to run.
