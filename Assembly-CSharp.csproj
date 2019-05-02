@@ -99,6 +99,7 @@
     <Compile Include="Assets\Unity UI Samples\Scripts\DragMe.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\LoadSceneOnClick.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\PanelManager.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ScrollDetailTexture.cs" />
