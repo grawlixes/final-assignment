@@ -1,0 +1,60 @@
+commit a8915ba5298a7be54537af4950330e9790c0d98b
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu May 2 21:58:27 2019 -0400
+
+    Final commit for project 7 check-in.
+
+commit 1e33fa4fd9acbe572e5e5aa94f463f5e06764e96
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu May 2 12:48:28 2019 -0400
+
+    Finished character select, launch fight
+
+commit 650a0d28e4efc6d067c82f354c4ae1b95b10d490
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Wed May 1 21:55:43 2019 -0400
+
+    Character select
+
+commit 4774d746d882218d9b2e39be8d410697f295d769
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 26 19:33:30 2019 -0400
+
+    Made title nicer, plus 'help' screen
+
+commit d97752794f65c62a41eb6dada7a3802bbd452190
+Merge: fed38dd 45bab87
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 26 10:43:26 2019 -0400
+
+    Merge branch 'master' of https://github.com/grawlixes/final-assignment
+
+commit fed38dd026512747837de6ece960c14c67e3044b
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Fri Apr 26 10:43:06 2019 -0400
+
+    Title screen works
+
+commit 45bab87708fc542b91f5c38bcb7ee5f6be953a67
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 25 12:48:46 2019 -0400
+
+    I'm bad at formatting.
+
+commit b1c7e9ee5ac5e1b3ad6d9d92bd5fa103e346833c
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 25 12:47:17 2019 -0400
+
+    Update README.md
+
+commit 63126bc01b74f2c32531cb8dc00da293f6a2ce11
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Thu Apr 25 12:45:28 2019 -0400
+
+    Added info about the game to readme
+
+commit b31a2d024cc83776a4465deab64215e17ca85f32
+Author: Kyle Franke <kfranke1@binghamton.edu>
+Date:   Tue Apr 9 10:20:00 2019 -0400
+
+    Initial
