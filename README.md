@@ -38,7 +38,6 @@ Controls (planned, subject to change throughout development):
     attack, or something else. It depends on the character. You can only use it when your ULTRA bar fills up, which 
     happens when you get hit (and when you hit the enemy, to an extent).
 
-
-I'll probably use existing sprites from random video game characters that I like to start.
+For now, I'm using existing sprites from Street Fighter Arcade and Samurai Showdown 4. If I release it, I'll change these to my own sprites. So far, I have finished the main screen, help screen, and character select screen. You'll notice that one of the characters is blacked out - you have to unlock him.
 
 This is a lot of stuff, so I might cut down during development or add things that I think would be cool. *Anything with a // in front of it is something that potentially will be cut or made more simple for time.* I figure I might as well aim high to start. I'll probably continue working after the due date if I cut things, because this seems like something I'd like to release. No online planned right now, but maybe someday.
