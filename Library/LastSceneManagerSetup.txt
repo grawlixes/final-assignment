@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Unity UI Samples/Scenes/TitleScene.unity
+- path: Assets/Unity UI Samples/Scenes/FightScene.unity
   isLoaded: 1
   isActive: 1
