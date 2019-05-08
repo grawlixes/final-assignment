@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Unity UI Samples/Scenes/FightScene.unity
+- path: Assets/Unity UI Samples/Scenes/CharacterSelectScene.unity
   isLoaded: 1
   isActive: 1

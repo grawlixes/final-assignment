@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -657,6 +657,7 @@ GameObject:
   - component: {fileID: 695465773}
   - component: {fileID: 695465772}
   - component: {fileID: 695465771}
+  - component: {fileID: 695465774}
   m_Layer: 5
   m_Name: Player2DropImage
   m_TagString: Untagged
@@ -735,6 +736,19 @@ MonoBehaviour:
   containerImage: {fileID: 1161611646}
   receivingImage: {fileID: 695465771}
   highlightColor: {r: 0.91764706, g: 0.2338216, b: 0.109803915, a: 1}
+--- !u!114 &695465774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695465769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5c9939a99dbc884eb2d3fb3ac0c5195, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p2: {fileID: 0}
 --- !u!20 &759682596 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2000000, guid: 7461a7b0cf97947fd9b9e4502fd2d07b,
@@ -1691,6 +1705,7 @@ GameObject:
   - component: {fileID: 1583289240}
   - component: {fileID: 1583289239}
   - component: {fileID: 1583289238}
+  - component: {fileID: 1583289241}
   m_Layer: 5
   m_Name: Player1DropImage
   m_TagString: Untagged
@@ -1769,6 +1784,19 @@ MonoBehaviour:
   containerImage: {fileID: 657950953}
   receivingImage: {fileID: 1583289238}
   highlightColor: {r: 0.91764706, g: 0.2338216, b: 0.109803915, a: 1}
+--- !u!114 &1583289241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583289236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fe8f3c51f4ec4d42934bf120603c010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  p1: {fileID: 0}
 --- !u!224 &1664208818 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22400004, guid: 05a81c3d5091440058129444d28322f3,
@@ -1894,7 +1922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
