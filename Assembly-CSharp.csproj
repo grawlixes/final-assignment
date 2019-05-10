@@ -96,6 +96,7 @@
     <Compile Include="Assets\Unity UI Samples\Scripts\ActiveStateToggler.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ApplicationManager.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ChangeColor.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\DecreaseHealth.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DragMe.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
