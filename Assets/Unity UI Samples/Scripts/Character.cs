@@ -42,8 +42,8 @@ public class Character : MonoBehaviour
         nextUpdate -= 1;
 
         if (nextUpdate == 0) {
-            // build path to next image
-            string img = characterName + '_' + state + '_' +
+            // build path to next image and use it
+            string img = characterName + '_' + "idle" + '_' +
                          (animationIndex + 1).ToString();
             self.GetComponent<SpriteRenderer>().sprite =
                 Resources.Load<Sprite>(img);
@@ -51,6 +51,21 @@ public class Character : MonoBehaviour
             animationIndex = (animationIndex + 1) % stateLength;
 
             nextUpdate = FREQ;
+                
+            if (state == "left") {
+                self.transform.localPosition -= new Vector3(20F, 0, 0);
+                nextUpdate = 5;
+            } else if (state == "right") {
+                self.transform.localPosition += new Vector3(20F, 0, 0);
+                nextUpdate = 5;
+            }
         }
+    }
+
+    // Changes state.
+    void ChangeState(string newState, int newStateLength) {
+        state = newState;
+        stateLength = newStateLength;
+        animationIndex = 0;
     }
 }

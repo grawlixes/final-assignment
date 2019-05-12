@@ -103,6 +103,7 @@
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\Fight.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\LoadSceneOnClick.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\Move.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\PanelManager.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\ResizePanel.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\SavePlayer1Character.cs" />
