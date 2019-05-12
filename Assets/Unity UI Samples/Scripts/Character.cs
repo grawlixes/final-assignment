@@ -12,7 +12,10 @@ public class Character : MonoBehaviour
     public int player;
     public int animationIndex;
     public int health;
+    
     public GameObject self;
+    public Move leftButton;
+    public Move rightButton;
 
     public const int FREQ = 30;
 
@@ -33,7 +36,11 @@ public class Character : MonoBehaviour
         health = 100;
        
         self = GameObject.Find("Canvas/Player" + player.ToString());
-
+        
+        leftButton = GameObject.Find("Canvas/LeftButton")
+                               .GetComponent<Move>();
+        rightButton = GameObject.Find("Canvas/RightButton")
+                               .GetComponent<Move>();
     }
 
     // Update is called once per frame
@@ -52,10 +59,14 @@ public class Character : MonoBehaviour
 
             nextUpdate = FREQ;
                 
-            if (state == "left") {
+            if (player == 1 &&
+                    state == "idle" &&
+                    leftButton.isPressed) {
                 self.transform.localPosition -= new Vector3(20F, 0, 0);
                 nextUpdate = 5;
-            } else if (state == "right") {
+            } else if (player == 1 &&
+                       state == "idle" && 
+                       rightButton.isPressed) {
                 self.transform.localPosition += new Vector3(20F, 0, 0);
                 nextUpdate = 5;
             }
