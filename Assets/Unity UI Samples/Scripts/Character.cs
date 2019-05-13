@@ -108,32 +108,45 @@ public class Character : MonoBehaviour
                     
                     self.transform.localPosition += new Vector3(20F * mul, 0, 0);
                 } else if (state == "light2") {
-                    state = "light2";
+                    state = "light3";
                     stateLength = 4;
                     nextUpdate = 1;
                     animationIndex = 0;
-                    
-                    int mul = -1;
-                    if (facingForward)
-                        mul = 1;
-                    
-                    self.transform.localPosition += new Vector3(20F * mul, 0, 0);
                 } else if (state == "light3") {
-                    // Heavy attack
+                    state = "heavy";
+                    stateLength = 5;
+                    nextUpdate = 1;
+                    animationIndex = 0;
+                } else {
+                    // ignore it
+                    nextUpdate = Math.Min(nextUpdate, 5);
                 }
 
                 touches = 0;
-                nextUpdate = 1;
             } else if (state == "light1") {
-                if (animationIndex == 2)
+                if (animationIndex == 2) {
                     nextUpdate = 16;
-                else
+                } else {
                     nextUpdate = 8;
+                }
             } else if (state == "light2") {
-                if (animationIndex == 3)
+                if (animationIndex == 3) {
                     nextUpdate = 16;
-                else
-                    nextUpdate = 4;
+                } else {
+                    nextUpdate = 8;
+                }
+            } else if (state == "light3") {
+                if (animationIndex == 2) {
+                    nextUpdate = 20;
+                } else {
+                    nextUpdate = 8;
+                }
+            } else if (state == "heavy") {
+                if (animationIndex == 2) {
+                    nextUpdate = 16;
+                } else {
+                    nextUpdate = 8;
+                }
             } else if (player == 1 &&
                     NumTouches() >= 2) {
                 // TODO blocking, only works on mobile
