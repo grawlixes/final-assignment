@@ -63,7 +63,7 @@ public class Character : MonoBehaviour
             animationIndex = (animationIndex + 1) % stateLength;
             nextUpdate = FREQ;
 
-            if (animationIndex == 0 &&
+            if (animationIndex == 0 && touches == 0 &&
                 ((state.Length >= 5 && state.Substring(0, 5) == "light") ||
                  state == "heavy" || state == "upper")) {
                 state = "idle";
@@ -71,7 +71,8 @@ public class Character : MonoBehaviour
                 nextUpdate = 1;
             }
            
-            if (player == 1 &&
+            if (player == 1 && 
+                    (animationIndex == stateLength-1 || state == "idle") &&
                     touches == 1) {
                 float tapPosition = this.GetTouch(0);
 
@@ -89,12 +90,50 @@ public class Character : MonoBehaviour
                     stateLength = 3;
                     nextUpdate = 1;
                     animationIndex = 0;
+                    
+                    int mul = -1;
+                    if (facingForward)
+                        mul = 1;
+                    
+                    self.transform.localPosition += new Vector3(10F * mul, 0, 0);
+                } else if (state == "light1") {
+                    state = "light2";
+                    stateLength = 4;
+                    nextUpdate = 1;
+                    animationIndex = 0;
+                    
+                    int mul = -1;
+                    if (facingForward)
+                        mul = 1;
+                    
+                    self.transform.localPosition += new Vector3(20F * mul, 0, 0);
+                } else if (state == "light2") {
+                    state = "light2";
+                    stateLength = 4;
+                    nextUpdate = 1;
+                    animationIndex = 0;
+                    
+                    int mul = -1;
+                    if (facingForward)
+                        mul = 1;
+                    
+                    self.transform.localPosition += new Vector3(20F * mul, 0, 0);
+                } else if (state == "light3") {
+                    // Heavy attack
                 }
 
                 touches = 0;
                 nextUpdate = 1;
-            } else if (state.Length >= 5 && state.Substring(0, 5) == "light") {
-                nextUpdate = 8;
+            } else if (state == "light1") {
+                if (animationIndex == 2)
+                    nextUpdate = 16;
+                else
+                    nextUpdate = 8;
+            } else if (state == "light2") {
+                if (animationIndex == 3)
+                    nextUpdate = 16;
+                else
+                    nextUpdate = 4;
             } else if (player == 1 &&
                     NumTouches() >= 2) {
                 // TODO blocking, only works on mobile
