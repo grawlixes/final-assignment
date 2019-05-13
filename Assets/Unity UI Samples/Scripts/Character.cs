@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
 {
     public string characterName;
     public string state;
+    public string swipe;
     public int stateLength;
     public int nextUpdate;
     public int player;
@@ -36,6 +37,8 @@ public class Character : MonoBehaviour
         nextUpdate = FREQ;
         animationIndex = 0;
         facingForward = player == 1;
+        touches = 0;
+        swipe = "";
 
         health = 100;
     
@@ -43,15 +46,19 @@ public class Character : MonoBehaviour
         
         leftButton = GameObject.Find("Canvas/LeftButton")
                                .GetComponent<Move>();
+        leftButton.button = 1;
         rightButton = GameObject.Find("Canvas/RightButton")
                                .GetComponent<Move>();
+        rightButton.button = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
         nextUpdate -= 1;
-        touches = Math.Max(touches, this.NumTouches());
+
+        if (touches == 0) 
+            touches = this.NumTouches();
 
         if (nextUpdate == 0 || (player == 1 && touches > 0)) {
             // build path to next image and use it
@@ -69,13 +76,32 @@ public class Character : MonoBehaviour
                 state = "idle";
                 stateLength = 2;
                 nextUpdate = 1;
-            }
-           
-            if (player == 1 && 
+            } else if (player == 1 && 
+                    (animationIndex == stateLength-1 || state == "idle") &&
+                    touches == -1) {
+                Debug.Log("Jump (up swipe)");
+                touches = 0;
+            } else if (player == 1 && 
+                    (animationIndex == stateLength-1 || state == "idle") &&
+                    touches == -2) {
+                Debug.Log("Heavy attack (right swipe)");
+                touches = 0;
+            } else if (player == 1 && 
+                    (animationIndex == stateLength-1 || state == "idle") &&
+                    touches == -3) {
+                Debug.Log("upper attack (down swipe)");
+                touches = 0;
+            } else if (player == 1 && 
+                    (animationIndex == stateLength-1 || state == "idle") &&
+                    touches == -4) {
+                Debug.Log("Roll (left swipe)");
+                touches = 0;
+            } else if (player == 1 && 
                     (animationIndex == stateLength-1 || state == "idle") &&
                     touches == 1) {
                 float tapPosition = this.GetTouch(0);
 
+                /*
                 if (facingForward ^
                     tapPosition > self.transform.position.x) {
                     self.transform.localScale = 
@@ -84,6 +110,7 @@ public class Character : MonoBehaviour
                                     self.transform.localScale.z);
                     facingForward = !facingForward;
                 }
+                */
 
                 if (state == "idle" || state == "walking") {
                     state = "light1";
@@ -182,13 +209,51 @@ public class Character : MonoBehaviour
         }
     }
 
+    // If ret > 0, then there were ret touches.
+    // If ret == 0, then there were no touches.
+    // If ret < 0, then there was a swipe.
+    // (-1, -2, -3, -4) -> (jump, heavy, upper, roll).
     int NumTouches() {
         if (Application.platform == RuntimePlatform.WindowsEditor) {
-            if (Input.GetMouseButtonDown(0) &&
-                    !leftButton.isPressed && !rightButton.isPressed) {
-                return 1;
+            /*
+            if (Input.GetMouseButtonDown(0)) {
+                float x = Input.GetAxis("Mouse X");
+                float y = Input.GetAxis("Mouse Y");
+
+                Debug.Log(x + "" + y); 
+
+                if (Math.Abs(x) < Math.Abs(y)) {
+                    if (y > 0) {
+                        return -1;
+                    } else {
+                        return -3;
+                    }
+                } else if (Math.Abs(x) > Math.Abs(y)) {
+                    if (x > 0) {
+                        return -2;
+                    } else {
+                        return -4;
+                    }
+                } else if (!leftButton.isPressed && !rightButton.isPressed) { 
+                    return 1;
+                }
             }
             return 0;
+            */
+           
+            if (Input.GetKeyDown("e")) {
+                return 1;
+            } else if (Input.GetKeyDown("space")) {
+                return -1;
+            } else if (Input.GetKeyDown("f")) {
+                return -2;
+            } else if (Input.GetKeyDown("q")) {
+                return -3;
+            } else if (Input.GetKeyDown("left shift")) {
+                return -4;
+            }
+            return 0;
+
         } else {
            return Input.touchCount;
         } 
