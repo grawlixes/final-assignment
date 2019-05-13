@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Character : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class Character : MonoBehaviour
     public int player;
     public int animationIndex;
     public int health;
-    
+    public int touches;
+    public bool facingForward;
+
     public GameObject self;
     public Move leftButton;
     public Move rightButton;
@@ -32,9 +35,10 @@ public class Character : MonoBehaviour
         stateLength = 2;
         nextUpdate = FREQ;
         animationIndex = 0;
+        facingForward = player == 1;
 
         health = 100;
-       
+    
         self = GameObject.Find("Canvas/Player" + player.ToString());
         
         leftButton = GameObject.Find("Canvas/LeftButton")
@@ -47,10 +51,11 @@ public class Character : MonoBehaviour
     void Update()
     {
         nextUpdate -= 1;
+        touches = Math.Max(touches, this.NumTouches());
 
-        if (nextUpdate == 0) {
+        if (nextUpdate == 0 || (player == 1 && touches > 0)) {
             // build path to next image and use it
-            string img = characterName + '_' + "idle" + '_' +
+            string img = characterName + '_' + state + '_' +
                          (animationIndex + 1).ToString();
             self.GetComponent<SpriteRenderer>().sprite =
                 Resources.Load<Sprite>(img);
@@ -58,23 +63,79 @@ public class Character : MonoBehaviour
             animationIndex = (animationIndex + 1) % stateLength;
 
             nextUpdate = FREQ;
-                
+           
             if (player == 1 &&
-                    state == "idle" &&
-                    leftButton.isPressed) {
-                self.transform.localPosition -= new Vector3(20F, 0, 0);
-                nextUpdate = 5;
+                    touches == 1) {
+                float tapPosition = this.GetTouch(0);
+
+                if (facingForward ^
+                    tapPosition > self.transform.position.x) {
+                    self.transform.localScale = 
+                        new Vector3(self.transform.localScale.x * -1,
+                                    self.transform.localScale.y,
+                                    self.transform.localScale.z);
+                    facingForward = !facingForward;
+                }
+
+                touches = 0;
+                nextUpdate = 1;
             } else if (player == 1 &&
-                       state == "idle" && 
+                    NumTouches() >= 2) {
+                // TODO blocking, only works on mobile
+                // because you can't double tap on PC.
+
+                touches = 0;
+                nextUpdate = 1;
+            } else if (player == 1 &&
+                    state == "walking" &&
+                    leftButton.isPressed) {
+                self.transform.localPosition -= new Vector3(35F, 0, 0);
+                nextUpdate = 9;
+                if (facingForward) {
+                    self.transform.localScale = 
+                        new Vector3(self.transform.localScale.x * -1,
+                                    self.transform.localScale.y,
+                                    self.transform.localScale.z);
+                    facingForward = false;
+                }
+            } else if (player == 1 &&
+                       state == "walking" &&
                        rightButton.isPressed) {
-                self.transform.localPosition += new Vector3(20F, 0, 0);
-                nextUpdate = 5;
+                self.transform.localPosition += new Vector3(35F, 0, 0);
+                nextUpdate = 9;
+                if (!facingForward) {
+                    self.transform.localScale =
+                        new Vector3(self.transform.localScale.x * -1,
+                                    self.transform.localScale.y,
+                                    self.transform.localScale.z);
+                    facingForward = true;
+                }
             }
         }
     }
 
+    int NumTouches() {
+        if (Application.platform == RuntimePlatform.WindowsEditor) {
+            if (Input.GetMouseButtonDown(0)) {
+                return 1;
+            }
+            return 0;
+        } else {
+           return Input.touchCount;
+        } 
+    }
+
+    float GetTouch(int touchIndex) {
+        if (Application.platform == RuntimePlatform.WindowsEditor) {
+            Vector3 ret = Input.mousePosition;
+            ret.z = 100;
+            return Camera.main.ScreenToWorldPoint(ret).x;
+        } else {
+            return Input.GetTouch(touchIndex).position.x;
+        } 
+    }
     // Changes state.
-    void ChangeState(string newState, int newStateLength) {
+    public void ChangeState(string newState, int newStateLength) {
         state = newState;
         stateLength = newStateLength;
         animationIndex = 0;
