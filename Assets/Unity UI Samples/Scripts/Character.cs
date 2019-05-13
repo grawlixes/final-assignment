@@ -61,8 +61,15 @@ public class Character : MonoBehaviour
                 Resources.Load<Sprite>(img);
            
             animationIndex = (animationIndex + 1) % stateLength;
-
             nextUpdate = FREQ;
+
+            if (animationIndex == 0 &&
+                ((state.Length >= 5 && state.Substring(0, 5) == "light") ||
+                 state == "heavy" || state == "upper")) {
+                state = "idle";
+                stateLength = 2;
+                nextUpdate = 1;
+            }
            
             if (player == 1 &&
                     touches == 1) {
@@ -77,8 +84,17 @@ public class Character : MonoBehaviour
                     facingForward = !facingForward;
                 }
 
+                if (state == "idle" || state == "walking") {
+                    state = "light1";
+                    stateLength = 3;
+                    nextUpdate = 1;
+                    animationIndex = 0;
+                }
+
                 touches = 0;
                 nextUpdate = 1;
+            } else if (state.Length >= 5 && state.Substring(0, 5) == "light") {
+                nextUpdate = 8;
             } else if (player == 1 &&
                     NumTouches() >= 2) {
                 // TODO blocking, only works on mobile
@@ -116,7 +132,8 @@ public class Character : MonoBehaviour
 
     int NumTouches() {
         if (Application.platform == RuntimePlatform.WindowsEditor) {
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetMouseButtonDown(0) &&
+                    !leftButton.isPressed && !rightButton.isPressed) {
                 return 1;
             }
             return 0;
