@@ -102,6 +102,7 @@
     <Compile Include="Assets\Unity UI Samples\Scripts\DragPanel.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\DropMe.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\Fight.cs" />
+    <Compile Include="Assets\Unity UI Samples\Scripts\FinalMessage.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\LoadSceneOnClick.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\Move.cs" />
     <Compile Include="Assets\Unity UI Samples\Scripts\PanelManager.cs" />

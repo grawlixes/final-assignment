@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public class DecreaseHealth : MonoBehaviour
 {
+    public int player;
 
     public void Run(int checksum) {
-        int player = 1;
-        if (checksum < 0) {
-            player = -1;
-        }
         int damage = Mathf.Abs(checksum);
 
         GameObject bar;

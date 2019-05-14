@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPressed: 0
+  button: 0
   p1: {fileID: 0}
 --- !u!114 &25302764
 MonoBehaviour:
@@ -385,6 +386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0842e246961198549ba36605efe177e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 0
 --- !u!1 &67882923
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +442,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fd9568520a70595428f085a84a39667c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.91764706, g: 0.2338216, b: 0.109803915, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -751,6 +753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPressed: 0
+  button: 0
   p1: {fileID: 0}
 --- !u!114 &542893080
 MonoBehaviour:
@@ -1044,6 +1047,7 @@ GameObject:
   - component: {fileID: 1000098270}
   - component: {fileID: 1000098271}
   - component: {fileID: 1000098272}
+  - component: {fileID: 1000098273}
   m_Layer: 0
   m_Name: Player1
   m_TagString: Untagged
@@ -1127,17 +1131,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: 
   state: 
+  swipe: 
   stateLength: 0
   nextUpdate: 0
   player: 1
   animationIndex: 0
   health: 0
   touches: 0
+  hitFrom: 0
   facingForward: 0
   self: {fileID: 0}
+  opponent: {fileID: 0}
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
-  WIDTH_OFFSET: 0
+--- !u!114 &1000098273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000098269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0842e246961198549ba36605efe177e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: 1
 --- !u!20 &1036232499 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2000000, guid: 7461a7b0cf97947fd9b9e4502fd2d07b,
@@ -1485,6 +1504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0842e246961198549ba36605efe177e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 0
 --- !u!212 &1405072068
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1670,6 +1690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0842e246961198549ba36605efe177e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 0
 --- !u!1 &1835509074
 GameObject:
   m_ObjectHideFlags: 0
@@ -1761,6 +1782,7 @@ GameObject:
   - component: {fileID: 1920628542}
   - component: {fileID: 1920628543}
   - component: {fileID: 1920628544}
+  - component: {fileID: 1920628545}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Untagged
@@ -1844,17 +1866,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: 
   state: 
+  swipe: 
   stateLength: 0
   nextUpdate: 0
   player: 2
   animationIndex: 0
   health: 0
   touches: 0
+  hitFrom: 0
   facingForward: 0
   self: {fileID: 0}
+  opponent: {fileID: 0}
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
-  WIDTH_OFFSET: 0
+--- !u!114 &1920628545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920628541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0842e246961198549ba36605efe177e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: -1
 --- !u!1 &1949968374
 GameObject:
   m_ObjectHideFlags: 0

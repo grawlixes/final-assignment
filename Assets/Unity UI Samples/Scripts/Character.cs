@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 
 public class Character : MonoBehaviour
@@ -15,9 +16,11 @@ public class Character : MonoBehaviour
     public int animationIndex;
     public int health;
     public int touches;
+    public int hitFrom;
     public bool facingForward;
 
     public GameObject self;
+    public GameObject opponent;
     public Move leftButton;
     public Move rightButton;
 
@@ -33,17 +36,19 @@ public class Character : MonoBehaviour
                         .Substring(0, characterName.IndexOf("I"));
         
         state = "idle";
+        swipe = "";
         stateLength = 2;
         nextUpdate = FREQ;
         animationIndex = 0;
-        facingForward = player == 1;
+        facingForward = (player == 1);
         touches = 0;
-        swipe = "";
+        hitFrom = 0;
 
         health = 100;
     
         self = GameObject.Find("Canvas/Player" + player.ToString());
-        
+        opponent = GameObject.Find("Canvas/Player" + (3-player).ToString());
+
         leftButton = GameObject.Find("Canvas/LeftButton")
                                .GetComponent<Move>();
         leftButton.button = 1;
@@ -55,12 +60,16 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        nextUpdate -= 1;
+        if (health <= 0) {
+            PlayerPrefs.SetString("loser", player.ToString());
+            SceneManager.LoadScene("winnerScene");
+        }
 
-        if (touches == 0) 
+        nextUpdate -= 1;
+        if (player == 1 && touches == 0) 
             touches = this.NumTouches();
 
-        if (nextUpdate == 0 || (player == 1 && touches > 0)) {
+        if (nextUpdate == 0 || (player == 1 && touches != 0)) {
             // build path to next image and use it
             string img = characterName + '_' + state + '_' +
                          (animationIndex + 1).ToString();
@@ -71,33 +80,56 @@ public class Character : MonoBehaviour
             nextUpdate = FREQ;
 
             if (animationIndex == 0 && touches == 0 &&
-                ((state.Length >= 5 && state.Substring(0, 5) == "light") ||
-                 state == "heavy" || state == "upper")) {
+                state != "idle" && state != "walking") {
                 state = "idle";
                 stateLength = 2;
-                nextUpdate = 1;
+                nextUpdate = 8;
             } else if (player == 1 && 
-                    (animationIndex == stateLength-1 || state == "idle") &&
+                    (animationIndex == 0 || state == "idle") &&
                     touches == -1) {
                 Debug.Log("Jump (up swipe)");
                 touches = 0;
             } else if (player == 1 && 
-                    (animationIndex == stateLength-1 || state == "idle") &&
+                    (animationIndex == 0 || state == "idle") &&
                     touches == -2) {
-                Debug.Log("Heavy attack (right swipe)");
+                state = "heavy";
+                stateLength = 5;
+                nextUpdate = 1;
+                animationIndex = 0;
                 touches = 0;
             } else if (player == 1 && 
-                    (animationIndex == stateLength-1 || state == "idle") &&
+                    (animationIndex == 0 || state == "idle") &&
                     touches == -3) {
                 Debug.Log("upper attack (down swipe)");
                 touches = 0;
-            } else if (player == 1 && 
-                    (animationIndex == stateLength-1 || state == "idle") &&
+            } else if (player == 1 &&  
+                    (animationIndex == 0 || state == "idle") &&
                     touches == -4) {
-                Debug.Log("Roll (left swipe)");
+                // dodge
+                int mul = 1;
+                if (facingForward)
+                    mul = -1;
+                
+                state = "dodge";
+                stateLength = 3;
+                animationIndex = 0;
+                nextUpdate = 1;
                 touches = 0;
+
+                self.transform.localPosition += new Vector3(5F * mul, 0, 0);
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
             } else if (player == 1 && 
-                    (animationIndex == stateLength-1 || state == "idle") &&
+                    (animationIndex == 0 || state == "idle") &&
                     touches == 1) {
                 float tapPosition = this.GetTouch(0);
 
@@ -123,6 +155,17 @@ public class Character : MonoBehaviour
                         mul = 1;
                     
                     self.transform.localPosition += new Vector3(10F * mul, 0, 0);
+                    if (self.transform.localPosition.x < -500) {
+                        self.transform.localPosition = new Vector3(-500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
+                    
+                    if (self.transform.localPosition.x > 500) {
+                        self.transform.localPosition = new Vector3(500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
                 } else if (state == "light1") {
                     state = "light2";
                     stateLength = 4;
@@ -134,6 +177,17 @@ public class Character : MonoBehaviour
                         mul = 1;
                     
                     self.transform.localPosition += new Vector3(20F * mul, 0, 0);
+                    if (self.transform.localPosition.x < -500) {
+                        self.transform.localPosition = new Vector3(-500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
+                    
+                    if (self.transform.localPosition.x > 500) {
+                        self.transform.localPosition = new Vector3(500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
                 } else if (state == "light2") {
                     state = "light3";
                     stateLength = 4;
@@ -146,33 +200,123 @@ public class Character : MonoBehaviour
                     animationIndex = 0;
                 } else {
                     // ignore it
-                    nextUpdate = Math.Min(nextUpdate, 5);
+                    nextUpdate = 1;
                 }
 
                 touches = 0;
+            } else if (state == "stun") {
+                if (animationIndex == 1) {
+                    nextUpdate = 20;
+                } else {
+                    nextUpdate = 8;
+                }
+
+                int mul = 1;
+                if (facingForward) mul = -1;
+                self.transform.localPosition += new Vector3(10F * mul, 0, 0);
+                
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+            } else if (state == "back") {
+                if (animationIndex == 2) {
+                    nextUpdate = 8;
+                
+                    int mul2 = 1;
+                    if (facingForward) mul2 = -1;
+                    self.transform.localPosition += new Vector3(80F * mul2, 0, 0);
+                    if (self.transform.localPosition.x < -500) {
+                        self.transform.localPosition = new Vector3(-500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
+                    
+                    if (self.transform.localPosition.x > 500) {
+                        self.transform.localPosition = new Vector3(500,
+                                self.transform.localPosition.y,
+                                self.transform.localPosition.z);
+                    }
+                } else if (animationIndex == 3) {
+                    nextUpdate = 120;
+                } else {
+                    nextUpdate = 8;
+                }
+
+                int mul = 1;
+                if (facingForward) mul = -1;
+                self.transform.localPosition += new Vector3(30F * mul, 0, 0);
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
             } else if (state == "light1") {
                 if (animationIndex == 2) {
+                    if (Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 100)
+                        this.DealDamage(2, "");
                     nextUpdate = 16;
                 } else {
                     nextUpdate = 8;
                 }
             } else if (state == "light2") {
                 if (animationIndex == 3) {
+                    if (Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 125)
+                        this.DealDamage(2, "");
                     nextUpdate = 16;
                 } else {
                     nextUpdate = 8;
                 }
             } else if (state == "light3") {
                 if (animationIndex == 2) {
+                    if (Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 125)
+                        this.DealDamage(3, "");
                     nextUpdate = 20;
                 } else {
                     nextUpdate = 8;
                 }
             } else if (state == "heavy") {
                 if (animationIndex == 2) {
+                    if (Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 150)
+                        this.DealDamage(5, "back");
                     nextUpdate = 16;
                 } else {
                     nextUpdate = 8;
+                }
+            } else if (state == "dodge") {
+                nextUpdate = 4;
+                
+                int mul = 1;
+                if (facingForward) mul = -1;
+
+                self.transform.localPosition += new Vector3(80F * mul, 0, 0);
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
                 }
             } else if (player == 1 &&
                     NumTouches() >= 2) {
@@ -185,6 +329,17 @@ public class Character : MonoBehaviour
                     state == "walking" &&
                     leftButton.isPressed) {
                 self.transform.localPosition -= new Vector3(35F, 0, 0);
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
                 nextUpdate = 9;
                 if (facingForward) {
                     self.transform.localScale = 
@@ -197,6 +352,17 @@ public class Character : MonoBehaviour
                        state == "walking" &&
                        rightButton.isPressed) {
                 self.transform.localPosition += new Vector3(35F, 0, 0);
+                if (self.transform.localPosition.x < -500) {
+                    self.transform.localPosition = new Vector3(-500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
+                
+                if (self.transform.localPosition.x > 500) {
+                    self.transform.localPosition = new Vector3(500,
+                            self.transform.localPosition.y,
+                            self.transform.localPosition.z);
+                }
                 nextUpdate = 9;
                 if (!facingForward) {
                     self.transform.localScale =
@@ -215,32 +381,6 @@ public class Character : MonoBehaviour
     // (-1, -2, -3, -4) -> (jump, heavy, upper, roll).
     int NumTouches() {
         if (Application.platform == RuntimePlatform.WindowsEditor) {
-            /*
-            if (Input.GetMouseButtonDown(0)) {
-                float x = Input.GetAxis("Mouse X");
-                float y = Input.GetAxis("Mouse Y");
-
-                Debug.Log(x + "" + y); 
-
-                if (Math.Abs(x) < Math.Abs(y)) {
-                    if (y > 0) {
-                        return -1;
-                    } else {
-                        return -3;
-                    }
-                } else if (Math.Abs(x) > Math.Abs(y)) {
-                    if (x > 0) {
-                        return -2;
-                    } else {
-                        return -4;
-                    }
-                } else if (!leftButton.isPressed && !rightButton.isPressed) { 
-                    return 1;
-                }
-            }
-            return 0;
-            */
-           
             if (Input.GetKeyDown("e")) {
                 return 1;
             } else if (Input.GetKeyDown("space")) {
@@ -273,5 +413,42 @@ public class Character : MonoBehaviour
         state = newState;
         stateLength = newStateLength;
         animationIndex = 0;
+    }
+
+    // Effect: "back" - flying back
+    //         "up"   - flying up
+    public void DealDamage(int damage, string effect) {
+        int mul = 1;
+        if (player == 1) mul = -1;
+
+        opponent.GetComponent<DecreaseHealth>().Run(mul * damage);
+        Character enemy = opponent.GetComponent<Character>();
+        enemy.health -= damage;
+
+        if (effect == "") {
+            enemy.state = "stun";
+            enemy.stateLength = 2;
+            enemy.animationIndex = 0;
+            enemy.nextUpdate = 1;
+            if (!(enemy.facingForward ^ facingForward)) {
+                opponent.transform.localScale = new Vector3(
+                        opponent.transform.localScale.x * -1,
+                        opponent.transform.localScale.y,
+                        opponent.transform.localScale.z);
+                enemy.facingForward = !enemy.facingForward;
+            }
+        } else if (effect == "back") {
+            enemy.state = "back";
+            enemy.stateLength = 3;
+            enemy.animationIndex = 0;
+            enemy.nextUpdate = 1;
+            if (!(enemy.facingForward ^ facingForward)) {
+                opponent.transform.localScale = new Vector3(
+                        opponent.transform.localScale.x * -1,
+                        opponent.transform.localScale.y,
+                        opponent.transform.localScale.z);
+                enemy.facingForward = !enemy.facingForward;
+            }
+        }
     }
 }
