@@ -51,10 +51,9 @@ public class Character : MonoBehaviour
 
         leftButton = GameObject.Find("Canvas/LeftButton")
                                .GetComponent<Move>();
-        leftButton.button = 1;
+        
         rightButton = GameObject.Find("Canvas/RightButton")
                                .GetComponent<Move>();
-        rightButton.button = 2;
     }
 
     // Update is called once per frame
@@ -66,10 +65,10 @@ public class Character : MonoBehaviour
         }
 
         nextUpdate -= 1;
-        if (player == 1 && touches == 0) 
+        if (touches == 0) 
             touches = this.NumTouches();
 
-        if (nextUpdate == 0 || (player == 1 && touches != 0)) {
+        if (nextUpdate == 0 || touches != 0) {
             // build path to next image and use it
             string img = characterName + '_' + state + '_' +
                          (animationIndex + 1).ToString();
@@ -79,17 +78,19 @@ public class Character : MonoBehaviour
             animationIndex = (animationIndex + 1) % stateLength;
             nextUpdate = FREQ;
 
+            //Debug.Log("Player " 
+
             if (animationIndex == 0 && touches == 0 &&
                 state != "idle" && state != "walking") {
                 state = "idle";
                 stateLength = 2;
                 nextUpdate = 8;
-            } else if (player == 1 && 
+            } else if ( 
                     (animationIndex == 0 || state == "idle") &&
                     touches == -1) {
                 Debug.Log("Jump (up swipe)");
                 touches = 0;
-            } else if (player == 1 && 
+            } else if (
                     (animationIndex == 0 || state == "idle") &&
                     touches == -2) {
                 state = "heavy";
@@ -97,12 +98,12 @@ public class Character : MonoBehaviour
                 nextUpdate = 1;
                 animationIndex = 0;
                 touches = 0;
-            } else if (player == 1 && 
+            } else if ( 
                     (animationIndex == 0 || state == "idle") &&
                     touches == -3) {
                 Debug.Log("upper attack (down swipe)");
                 touches = 0;
-            } else if (player == 1 &&  
+            } else if (  
                     (animationIndex == 0 || state == "idle") &&
                     touches == -4) {
                 // dodge
@@ -128,12 +129,13 @@ public class Character : MonoBehaviour
                             self.transform.localPosition.y,
                             self.transform.localPosition.z);
                 }
-            } else if (player == 1 && 
+            } else if ( 
                     (animationIndex == 0 || state == "idle") &&
                     touches == 1) {
-                float tapPosition = this.GetTouch(0);
 
                 /*
+                float tapPosition = this.GetTouch(0);
+                
                 if (facingForward ^
                     tapPosition > self.transform.position.x) {
                     self.transform.localScale = 
@@ -266,7 +268,9 @@ public class Character : MonoBehaviour
                 }
             } else if (state == "light1") {
                 if (animationIndex == 2) {
-                    if (Math.Abs(self.transform.localPosition.x - 
+                    if ((self.transform.localPosition.x <
+                            opponent.transform.localPosition.x ^ !facingForward)
+                            && Math.Abs(self.transform.localPosition.x - 
                                  opponent.transform.localPosition.x) < 100)
                         this.DealDamage(2, "");
                     nextUpdate = 16;
@@ -275,8 +279,10 @@ public class Character : MonoBehaviour
                 }
             } else if (state == "light2") {
                 if (animationIndex == 3) {
-                    if (Math.Abs(self.transform.localPosition.x - 
-                                 opponent.transform.localPosition.x) < 125)
+                    if ((self.transform.localPosition.x <
+                            opponent.transform.localPosition.x ^ !facingForward)
+                            && Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 120)
                         this.DealDamage(2, "");
                     nextUpdate = 16;
                 } else {
@@ -284,8 +290,10 @@ public class Character : MonoBehaviour
                 }
             } else if (state == "light3") {
                 if (animationIndex == 2) {
-                    if (Math.Abs(self.transform.localPosition.x - 
-                                 opponent.transform.localPosition.x) < 125)
+                    if ((self.transform.localPosition.x <
+                            opponent.transform.localPosition.x ^ !facingForward)
+                            && Math.Abs(self.transform.localPosition.x - 
+                                 opponent.transform.localPosition.x) < 120)
                         this.DealDamage(3, "");
                     nextUpdate = 20;
                 } else {
@@ -293,7 +301,9 @@ public class Character : MonoBehaviour
                 }
             } else if (state == "heavy") {
                 if (animationIndex == 2) {
-                    if (Math.Abs(self.transform.localPosition.x - 
+                    if ((self.transform.localPosition.x <
+                            opponent.transform.localPosition.x ^ !facingForward)
+                            && Math.Abs(self.transform.localPosition.x - 
                                  opponent.transform.localPosition.x) < 150)
                         this.DealDamage(5, "back");
                     nextUpdate = 16;
@@ -318,16 +328,17 @@ public class Character : MonoBehaviour
                             self.transform.localPosition.y,
                             self.transform.localPosition.z);
                 }
-            } else if (player == 1 &&
+            } else if (
                     NumTouches() >= 2) {
                 // TODO blocking, only works on mobile
                 // because you can't double tap on PC.
 
                 touches = 0;
                 nextUpdate = 1;
-            } else if (player == 1 &&
+            } else if (
                     state == "walking" &&
-                    leftButton.isPressed) {
+                    leftButton.isPressed[player-1]) {
+                Debug.Log("Player " + player + " walking left");
                 self.transform.localPosition -= new Vector3(35F, 0, 0);
                 if (self.transform.localPosition.x < -500) {
                     self.transform.localPosition = new Vector3(-500,
@@ -348,9 +359,10 @@ public class Character : MonoBehaviour
                                     self.transform.localScale.z);
                     facingForward = false;
                 }
-            } else if (player == 1 &&
+            } else if (
                        state == "walking" &&
-                       rightButton.isPressed) {
+                       rightButton.isPressed[player-1]) {
+                Debug.Log("Player " + player + " walking right");
                 self.transform.localPosition += new Vector3(35F, 0, 0);
                 if (self.transform.localPosition.x < -500) {
                     self.transform.localPosition = new Vector3(-500,
@@ -381,16 +393,30 @@ public class Character : MonoBehaviour
     // (-1, -2, -3, -4) -> (jump, heavy, upper, roll).
     int NumTouches() {
         if (Application.platform == RuntimePlatform.WindowsEditor) {
-            if (Input.GetKeyDown("e")) {
-                return 1;
-            } else if (Input.GetKeyDown("space")) {
-                return -1;
-            } else if (Input.GetKeyDown("f")) {
-                return -2;
-            } else if (Input.GetKeyDown("q")) {
-                return -3;
-            } else if (Input.GetKeyDown("left shift")) {
-                return -4;
+            if (player == 1) {
+                if (Input.GetKeyDown("e")) {
+                    return 1;
+                } else if (Input.GetKeyDown("space")) {
+                    return -1;
+                } else if (Input.GetKeyDown("f")) {
+                    return -2;
+                } else if (Input.GetKeyDown("q")) {
+                    return -3;
+                } else if (Input.GetKeyDown("left shift")) {
+                    return -4;
+                }
+            } else {
+                if (Input.GetKeyDown("u")) {
+                    return 1;
+                } else if (Input.GetKeyDown("n")) {
+                    return -1;
+                } else if (Input.GetKeyDown("h")) {
+                    return -2;
+                } else if (Input.GetKeyDown("o")) {
+                    return -3;
+                } else if (Input.GetKeyDown("right shift")) {
+                    return -4;
+                }
             }
             return 0;
 

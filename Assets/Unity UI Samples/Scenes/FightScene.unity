@@ -164,9 +164,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308db9a9c756a984cabc5a2211a1e884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPressed: 0
-  button: 0
+  isPressed: 
+  button: 1
+  otherButton: {fileID: 0}
   p1: {fileID: 0}
+  p2: {fileID: 0}
 --- !u!114 &25302764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,9 +754,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308db9a9c756a984cabc5a2211a1e884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPressed: 0
-  button: 0
+  isPressed: 
+  button: 2
+  otherButton: {fileID: 0}
   p1: {fileID: 0}
+  p2: {fileID: 0}
 --- !u!114 &542893080
 MonoBehaviour:
   m_ObjectHideFlags: 0
